@@ -47,7 +47,7 @@ test('admin can access log absensi table page', function () {
         ->assertSee('Unit Kerja');
 });
 
-test('admin can access lokasi absensi page and create page', function () {
+test('admin can access lokasi absensi page and create page with map picker', function () {
     $response = $this->actingAs($this->admin)->get('/admin/office-locations');
 
     $response->assertOk()
@@ -57,6 +57,8 @@ test('admin can access lokasi absensi page and create page', function () {
     $createResponse = $this->actingAs($this->admin)->get('/admin/office-locations/create');
     $createResponse->assertOk()
         ->assertSee('Nama Lokasi Kantor')
+        ->assertSee('Peta Interaktif Penentuan Titik Lokasi')
+        ->assertSee('filament-map-picker')
         ->assertSee('Radius Absensi');
 });
 

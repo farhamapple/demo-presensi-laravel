@@ -16,4 +16,16 @@ class EditOfficeLocation extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        if (isset($data['latitude'], $data['longitude'])) {
+            $data['location'] = [
+                'lat' => (float) $data['latitude'],
+                'lng' => (float) $data['longitude'],
+            ];
+        }
+
+        return $data;
+    }
 }
