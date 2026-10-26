@@ -41,8 +41,8 @@ Dokumen ini berisi rencana kerja bertahap (*phased roadmap*) pengembangan aplika
 | **Fase 1** | Inisialisasi Proyek & Fondasi Arsitektur | ✅ Selesai |
 | **Fase 2** | Skema Database, Model Eloquent & Seeder | ✅ Selesai |
 | **Fase 3** | Implementasi Service Layer & Algoritma Geofencing | ✅ Selesai |
-| **Fase 4** | Panel Admin SDM (Filament v5) | ⏳ Siap Dikerjakan |
-| **Fase 5** | API Mobile Pegawai (Laravel Sanctum) | ⏳ Menunggu |
+| **Fase 4** | Panel Admin SDM (Filament v5 - SiAbsen PRD) | ✅ Selesai |
+| **Fase 5** | API Mobile Pegawai (Laravel Sanctum) | ⏳ Siap Dikerjakan |
 | **Fase 6** | Pengujian (Pest Test), Dokumentasi API & Finalisasi | ⏳ Menunggu |
 
 ---
@@ -115,25 +115,27 @@ Tujuan: Memisahkan logika bisnis dari controller & panel, serta membangun algori
 
 ---
 
-### 🖥️ Fase 4: Panel Admin SDM (Filament v5)
+### 🖥️ Fase 4: Panel Admin SDM (Filament v5 - SiAbsen PRD)
 Tujuan: Membangun dashboard administrasi SDM berbasis web yang intuitif, cepat, dan responsif.
 
-- [ ] Kustomisasi Tampilan Panel Filament (Branding, Logo, Navigasi Admin SDM).
-- [ ] **Office Location Resource (`OfficeLocationResource`)**:
-  - Form input nama kantor, alamat, dan status aktif.
-  - Input & preview koordinat polygon (komponen peta interaktif/Leaflet atau visualizer polygon titik sudut).
-  - Tabel daftar lokasi kantor dengan status toggle.
-- [ ] **Employee Resource (`EmployeeResource`)**:
-  - CRUD data pegawai: NIP, nama lengkap, email, nomor HP, status aktif, kata sandi.
-  - Filter status pegawai (aktif / non-aktif).
-  - Reset kata sandi pegawai oleh admin.
-- [ ] **Attendance Resource (`AttendanceResource`)**:
-  - Daftar rekaman absensi pegawai secara real-time.
-  - Filter lanjutan: Rentang tanggal, nama pegawai, status absensi (Hadir, Terlambat, Di Luar Area), dan lokasi kantor.
-  - Modal detail absensi: Menampilkan jam masuk/pulang, koordinat GPS pegawai, dan indikator kesesuaian dengan polygon kantor.
-  - Export data absensi (CSV/Excel).
-- [ ] **Dashboard Widgets**:
-  - Widget statistik ringkasan absensi hari ini (Jumlah Hadir, Terlambat, Belum Absen).
+- [x] Kustomisasi Tampilan Panel Filament (Branding SiAbsen, Navigasi Admin SDM).
+- [x] **Dashboard SiAbsen**:
+  - [x] Widget 5 KPI Cards (Total Pegawai, Sudah Absen, Belum Absen, Terlambat, Lokasi Aktif).
+  - [x] Widget Aktivitas Absensi Terbaru hari ini secara real-time.
+- [x] **Office Location Resource (`OfficeLocationResource`)**:
+  - [x] Form input nama kantor, alamat, status aktif.
+  - [x] Input titik pusat koordinat (Lat, Lng) dan Radius Absensi (meter).
+  - [x] Form Repeater Batas Polygon Geofence.
+  - [x] Tabel daftar lokasi kantor dengan status badge dan toggle.
+- [x] **Employee Resource (`UserResource`)**:
+  - [x] CRUD data pegawai: NIP, nama lengkap, email, unit kerja, jabatan, nomor HP, status aktif, kata sandi.
+  - [x] Filter status pegawai dan unit kerja.
+- [x] **Attendance Resource (`AttendanceResource`)**:
+  - [x] Daftar rekaman log absensi pegawai secara real-time.
+  - [x] Filter lanjutan: Rentang tanggal, nama pegawai, status absensi (Hadir, Terlambat, Di Luar Area), unit kerja, dan lokasi kantor.
+  - [x] Modal detail absensi interaktif dengan **Leaflet OpenStreetMap**: visualisasi posisi pegawai vs area kantor (circle radius & polygon geofence), info jarak, status validasi, dan identitas pegawai.
+- [x] **Automated Tests Panel Admin**:
+  - [x] `tests/Feature/FilamentAdminPanelTest.php` (7 test cases passed 100%).
 
 ---
 

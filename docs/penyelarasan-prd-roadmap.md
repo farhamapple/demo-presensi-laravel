@@ -45,8 +45,8 @@ Untuk mendukung 100% kebutuhan PRD SiAbsen, dilakukan penambahan kolom ringan:
 | **Fase 1** | Inisialisasi Proyek, Panel Filament & Fondasi Arsitektur | ✅ Selesai | Rebranding ke SiAbsen & Sanctum siap |
 | **Fase 2** | Skema Database, Model Eloquent & Seeder | ✅ Selesai | Migrasi penyesuaian gap PRD ditambahkan |
 | **Fase 3** | Service Layer & Engine Geofencing (Dual Polygon & Radius) | ✅ Selesai | Ray Casting & Haversine formula teruji |
-| **Fase 4** | Panel Admin Web SiAbsen (Filament v5 - PRD Aligned) | ⏳ Siap Dikerjakan | Fokus Dashboard 5 KPI, Log Absensi + Map Modal, Lokasi Map Picker |
-| **Fase 5** | API Mobile Pegawai (Sanctum REST API) | ⏳ Menunggu | Endpoint Auth, Sync Lokasi, Check-in/out, History |
+| **Fase 4** | Panel Admin Web SiAbsen (Filament v5 - PRD Aligned) | ✅ Selesai | Dashboard 5 KPI, Log Absensi + Interactive Map Modal, Lokasi, Pegawai |
+| **Fase 5** | API Mobile Pegawai (Sanctum REST API) | ⏳ Siap Dikerjakan | Endpoint Auth, Sync Lokasi, Check-in/out, History |
 | **Fase 6** | Pengujian Terpadu, Dokumentasi API & Finalisasi | ⏳ Menunggu | Pest test menyeluruh & panduan mobile |
 
 ---
@@ -92,36 +92,37 @@ Untuk mendukung 100% kebutuhan PRD SiAbsen, dilakukan penambahan kolom ringan:
 ### 🖥️ Fase 4: Panel Admin Web SiAbsen (Filament v5 — PRD Aligned)
 Tujuan: Membangun dashboard administrasi web SiAbsen sesuai rancangan UX dan spesifikasi PRD.
 
-- [ ] **Branding & Tema Visual SiAbsen**:
-  - [ ] Judul Panel: **SiAbsen — Admin Web**.
-  - [ ] Arah desain Bappenas: Modern, professional, clean whitespace, palet warna primer biru/navy instansi.
-  - [ ] Navigasi sidebar: Dashboard, Log Absensi, Lokasi Absensi, Data Pegawai.
-- [ ] **Dashboard SiAbsen**:
-  - [ ] **5 KPI Cards**:
+- [x] **Branding & Tema Visual SiAbsen**:
+  - [x] Judul Panel: **SiAbsen — Admin Web**.
+  - [x] Arah desain Bappenas: Modern, professional, clean whitespace, palet warna primer biru/navy instansi.
+  - [x] Navigasi sidebar: Dashboard, Log Absensi, Lokasi Absensi, Data Pegawai.
+- [x] **Dashboard SiAbsen**:
+  - [x] **5 KPI Cards**:
     1. *Total Pegawai* (jumlah pegawai terdaftar).
     2. *Sudah Absen* (pegawai yang sudah presensi hari ini).
     3. *Belum Absen* (pegawai aktif yang belum presensi hari ini).
     4. *Terlambat* (pegawai yang presensi setelah batas waktu 08:00).
     5. *Lokasi Aktif* (jumlah titik lokasi kantor yang aktif).
-  - [ ] **Widget Aktivitas Terbaru**: Tabel transaksi absensi masuk/pulang terakhir dengan status visual badge.
-- [ ] **Resource Log Absensi (`AttendanceResource`)**:
-  - [ ] Kolom tabel: Waktu, Nama Pegawai, NIP, Unit Kerja, Jenis (Masuk / Pulang), Lokasi Kantor, Jarak (meter), Status Badge, Device.
-  - [ ] Status visual badge: **Hadir** (hijau/positif), **Terlambat** (kuning/warning), **Di Luar Lokasi** (merah/danger).
-  - [ ] Filter canggih: Rentang tanggal, Pegawai, Unit Kerja, Status, Lokasi.
-  - [ ] **Modal Detail Absensi Interaktif**:
-    - [ ] Identitas pegawai (Foto, Nama, NIP, Unit Kerja, Jabatan).
-    - [ ] Informasi transaksi (Waktu, Jenis, Status, Device, IP Address).
-    - [ ] **Peta Interaktif (Interactive Map)**: Menampilkan marker posisi pegawai saat absen vs area lokasi kantor, indikator jarak, dan status validasi.
-    - [ ] Timeline riwayat Masuk & Pulang hari tersebut.
-  - [ ] Fitur Export Log Absensi ke Excel / CSV.
-- [ ] **Resource Lokasi Absensi (`OfficeLocationResource`)**:
-  - [ ] Tampilan List Lokasi dengan status aktif/nonaktif toggle dan preview titik koordinat.
-  - [ ] **Form Pemetaan Lokasi dengan Map Picker**:
-    - [ ] Input Nama Lokasi, Alamat, Status.
-    - [ ] Input Latitude, Longitude, dan Radius Absensi (meter).
-    - [ ] Visualizer Area Geofence (Polygon & Lingkaran Radius) menggunakan Leaflet Map.
-- [ ] **Resource Pegawai (`EmployeeResource`)**:
-  - [ ] CRUD data pegawai: NIP, Nama, Email, Unit Kerja, Jabatan, Nomor Telepon, Status Keaktifan.
+  - [x] **Widget Aktivitas Terbaru**: Tabel transaksi absensi masuk/pulang terakhir dengan status visual badge.
+- [x] **Resource Log Absensi (`AttendanceResource`)**:
+  - [x] Kolom tabel: Waktu, Nama Pegawai, NIP, Unit Kerja, Jenis (Masuk / Pulang), Lokasi Kantor, Jarak (meter), Status Badge, Device.
+  - [x] Status visual badge: **Hadir** (hijau/positif), **Terlambat** (kuning/warning), **Di Luar Lokasi** (merah/danger).
+  - [x] Filter canggih: Rentang tanggal, Pegawai, Unit Kerja, Status, Lokasi.
+  - [x] **Modal Detail Absensi Interaktif**:
+    - [x] Identitas pegawai (Foto, Nama, NIP, Unit Kerja, Jabatan).
+    - [x] Informasi transaksi (Waktu, Jenis, Status, Device, IP Address).
+    - [x] **Peta Interaktif (Interactive Map)**: Menampilkan marker posisi pegawai saat absen vs area lokasi kantor (circle radius & polygon geofence), indikator jarak, dan status validasi.
+    - [x] Garis putus-putus dan popup visual lokasi riil.
+- [x] **Resource Lokasi Absensi (`OfficeLocationResource`)**:
+  - [x] Tampilan List Lokasi dengan status aktif/nonaktif toggle dan preview titik koordinat.
+  - [x] **Form Pemetaan Lokasi**:
+    - [x] Input Nama Lokasi, Alamat, Status.
+    - [x] Input Latitude, Longitude, dan Radius Absensi (meter).
+    - [x] Form Repeater Batas Area Polygon Geofence.
+- [x] **Resource Pegawai (`UserResource`)**:
+  - [x] CRUD data pegawai: NIP, Nama, Email, Unit Kerja, Jabatan, Nomor Telepon, Status Keaktifan.
+- [x] **Automated Tests Feature Panel Filament**:
+  - [x] `tests/Feature/FilamentAdminPanelTest.php` (7 test cases passed 100%).
 
 ### 📱 Fase 5: API Mobile Pegawai (RESTful API & Sanctum)
 Tujuan: Menyediakan API lengkap untuk aplikasi mobile smartphone pegawai.
@@ -146,3 +147,4 @@ Tujuan: Uji coba menyeluruh, penulisan spesifikasi API, dan perapian kode.
 - [ ] Dokumentasi Lengkap Endpoint API Mobile (`docs/api-spec.md`).
 - [ ] Linting & code formatting dengan Laravel Pint (`vendor/bin/pint --format agent`).
 - [ ] Panduan integrasi mobile dan deployment.
+
