@@ -46,8 +46,8 @@ Untuk mendukung 100% kebutuhan PRD SiAbsen, dilakukan penambahan kolom ringan:
 | **Fase 2** | Skema Database, Model Eloquent & Seeder | ✅ Selesai | Migrasi penyesuaian gap PRD ditambahkan |
 | **Fase 3** | Service Layer & Engine Geofencing (Dual Polygon & Radius) | ✅ Selesai | Ray Casting & Haversine formula teruji |
 | **Fase 4** | Panel Admin Web SiAbsen (Filament v5 - PRD Aligned) | ✅ Selesai | Dashboard 5 KPI, Log Absensi + Interactive Map Modal, Lokasi, Pegawai |
-| **Fase 5** | API Mobile Pegawai (Sanctum REST API) | ⏳ Siap Dikerjakan | Endpoint Auth, Sync Lokasi, Check-in/out, History |
-| **Fase 6** | Pengujian Terpadu, Dokumentasi API & Finalisasi | ⏳ Menunggu | Pest test menyeluruh & panduan mobile |
+| **Fase 5** | API Mobile Pegawai (Sanctum REST API) | ✅ Selesai | Endpoint Auth, Sync Lokasi, Check-in/out, History, 13 Tests Passed |
+| **Fase 6** | Pengujian Terpadu, Dokumentasi API & Finalisasi | ⏳ Siap Dikerjakan | Pest test menyeluruh & panduan mobile |
 
 ---
 
@@ -127,18 +127,21 @@ Tujuan: Membangun dashboard administrasi web SiAbsen sesuai rancangan UX dan spe
 ### 📱 Fase 5: API Mobile Pegawai (RESTful API & Sanctum)
 Tujuan: Menyediakan API lengkap untuk aplikasi mobile smartphone pegawai.
 
-- [ ] Endpoint Autentikasi:
-  - `POST /api/v1/auth/login` (login via NIP/Email).
-  - `POST /api/v1/auth/logout`.
-  - `GET /api/v1/auth/me` (profil, foto, unit kerja, jabatan).
-- [ ] Endpoint Lokasi Kantor:
-  - `GET /api/v1/office-locations` (daftar kantor aktif, koordinat pusat, radius, & polygon untuk panduan peta mobile).
-- [ ] Endpoint Presensi Pegawai:
-  - `POST /api/v1/attendance/check-in` (kirim lat, lng, device info, IP, otomatis hitung jarak & validasi geofence).
-  - `POST /api/v1/attendance/check-out` (kirim lat, lng, device info).
-  - `GET /api/v1/attendance/today` (status dan timeline absensi hari ini).
-  - `GET /api/v1/attendance/history` (riwayat presensi bulanan dengan paginasi).
-- [ ] Eloquent API Resources untuk konsistensi respon JSON mobile.
+- [x] Endpoint Autentikasi:
+  - [x] `POST /api/v1/auth/login` (login via NIP/Email).
+  - [x] `POST /api/v1/auth/logout`.
+  - [x] `GET /api/v1/auth/me` (profil, foto, unit kerja, jabatan).
+- [x] Endpoint Lokasi Kantor:
+  - [x] `GET /api/v1/office-locations` (daftar kantor aktif, koordinat pusat, radius, & polygon untuk panduan peta mobile).
+- [x] Endpoint Presensi Pegawai:
+  - [x] `POST /api/v1/attendance/check-in` (kirim lat, lng, device info, IP, otomatis hitung jarak & validasi geofence).
+  - [x] `POST /api/v1/attendance/check-out` (kirim lat, lng, device info).
+  - [x] `GET /api/v1/attendance/today` (status dan timeline absensi hari ini).
+  - [x] `GET /api/v1/attendance/history` (riwayat presensi bulanan dengan paginasi).
+- [x] Eloquent API Resources untuk konsistensi respon JSON mobile (`UserApiResource`, `OfficeLocationApiResource`, `AttendanceApiResource`).
+- [x] Form Request Validation ketat (`LoginRequest`, `CheckInRequest`, `CheckOutRequest`).
+- [x] Automated Tests API Mobile:
+  - [x] `tests/Feature/MobileApiTest.php` (13 test cases passed 100%).
 
 ### 🧪 Fase 6: Pengujian Terpadu, Dokumentasi API & Finalisasi
 Tujuan: Uji coba menyeluruh, penulisan spesifikasi API, dan perapian kode.

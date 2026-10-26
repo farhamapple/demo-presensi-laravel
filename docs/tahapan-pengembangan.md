@@ -42,8 +42,8 @@ Dokumen ini berisi rencana kerja bertahap (*phased roadmap*) pengembangan aplika
 | **Fase 2** | Skema Database, Model Eloquent & Seeder | ✅ Selesai |
 | **Fase 3** | Implementasi Service Layer & Algoritma Geofencing | ✅ Selesai |
 | **Fase 4** | Panel Admin SDM (Filament v5 - SiAbsen PRD) | ✅ Selesai |
-| **Fase 5** | API Mobile Pegawai (Laravel Sanctum) | ⏳ Siap Dikerjakan |
-| **Fase 6** | Pengujian (Pest Test), Dokumentasi API & Finalisasi | ⏳ Menunggu |
+| **Fase 5** | API Mobile Pegawai (Laravel Sanctum) | ✅ Selesai |
+| **Fase 6** | Pengujian (Pest Test), Dokumentasi API & Finalisasi | ⏳ Siap Dikerjakan |
 
 ---
 
@@ -142,20 +142,22 @@ Tujuan: Membangun dashboard administrasi SDM berbasis web yang intuitif, cepat, 
 ### 📱 Fase 5: API Mobile Pegawai (RESTful API & Sanctum)
 Tujuan: Menyediakan endpoint API yang aman, standar, dan mudah dikonsumsi oleh aplikasi mobile smartphone.
 
-- [ ] **Endpoint Autentikasi**:
-  - `POST /api/v1/auth/login`: Login pegawai menggunakan NIP/Email + Password (mengembalikan token Sanctum & profil).
-  - `POST /api/v1/auth/logout`: Revoke/hapus token sesi aktif.
-  - `GET /api/v1/auth/me`: Mengambil data profil pegawai yang sedang login.
-- [ ] **Endpoint Master Lokasi Kantor**:
-  - `GET /api/v1/office-locations`: Mengambil daftar kantor aktif beserta array polygon koordinat untuk ditampilkan pada peta aplikasi mobile.
-- [ ] **Endpoint Absensi**:
-  - `POST /api/v1/attendance/check-in`: Kirim koordinat GPS (`latitude`, `longitude`), melakukan validasi polygon geofence via `AttendanceService`, lalu menyimpan absensi masuk.
-  - `POST /api/v1/attendance/check-out`: Kirim koordinat GPS untuk absen pulang.
-  - `GET /api/v1/attendance/today`: Mengambil status absensi pegawai hari ini (apakah sudah absen masuk, jam berapa, status).
-  - `GET /api/v1/attendance/history`: Riwayat daftar absensi pegawai (mendukung pagination dan filter bulan/tahun).
-- [ ] Standardisasi format respons JSON menggunakan Eloquent API Resource:
-  - `UserResource`, `AttendanceResource`, `OfficeLocationResource`.
-- [ ] Validasi Request ketat (`StoreCheckInRequest`, `StoreCheckOutRequest`, `LoginRequest`).
+- [x] **Endpoint Autentikasi**:
+  - [x] `POST /api/v1/auth/login`: Login pegawai menggunakan NIP/Email + Password (mengembalikan token Sanctum & profil).
+  - [x] `POST /api/v1/auth/logout`: Revoke/hapus token sesi aktif.
+  - [x] `GET /api/v1/auth/me`: Mengambil data profil pegawai yang sedang login.
+- [x] **Endpoint Master Lokasi Kantor**:
+  - [x] `GET /api/v1/office-locations`: Mengambil daftar kantor aktif beserta array polygon koordinat untuk ditampilkan pada peta aplikasi mobile.
+- [x] **Endpoint Absensi**:
+  - [x] `POST /api/v1/attendance/check-in`: Kirim koordinat GPS (`latitude`, `longitude`), melakukan validasi polygon geofence via `AttendanceService`, lalu menyimpan absensi masuk.
+  - [x] `POST /api/v1/attendance/check-out`: Kirim koordinat GPS untuk absen pulang.
+  - [x] `GET /api/v1/attendance/today`: Mengambil status absensi pegawai hari ini (apakah sudah absen masuk, jam berapa, status).
+  - [x] `GET /api/v1/attendance/history`: Riwayat daftar absensi pegawai (mendukung pagination dan filter bulan/tahun).
+- [x] Standardisasi format respons JSON menggunakan Eloquent API Resource:
+  - `UserApiResource`, `AttendanceApiResource`, `OfficeLocationApiResource`.
+- [x] Validasi Request ketat (`LoginRequest`, `CheckInRequest`, `CheckOutRequest`).
+- [x] Automated Tests API Mobile:
+  - `tests/Feature/MobileApiTest.php` (13 test cases passed 100%).
 
 ---
 
