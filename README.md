@@ -1,58 +1,201 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏢 SiAbsen — Sistem Monitoring & API Presensi Pegawai Geofencing
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.shields.io/badge/Laravel-13.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 13" />
+  <img src="https://img.shields.io/badge/Filament-v5.x-FFA500?style=for-the-badge&logo=filament&logoColor=white" alt="Filament v5" />
+  <img src="https://img.shields.io/badge/PHP-8.5-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.5" />
+  <img src="https://img.shields.io/badge/Database-SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" />
+  <img src="https://img.shields.io/badge/Tests-45%20Passed-brightgreen?style=for-the-badge&logo=pest&logoColor=white" alt="Pest Tests" />
 </p>
 
-## About Laravel
+**SiAbsen** adalah platform administrasi dan *Application Programming Interface* (API) presensi pegawai berbasis mobile smartphone. Aplikasi ini dirancang untuk **Admin HR / SDM** guna memantau aktivitas kehadiran pegawai secara *real-time*, memetakan titik lokasi absensi kantor (*dual geofencing: polygon & radius*), serta menyediakan *endpoint* RESTful API bagi aplikasi mobile pegawai.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 👥 Pengguna & Hak Akses
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Admin HR / SDM (Web Console - Filament v5)**
+   - Akses via browser di `/admin`.
+   - Memantau kondisi absensi harian melalui **5 KPI Cards** & riwayat aktivitas terbaru.
+   - Mengelola titik lokasi kantor dengan validasi titik pusat koordinat, radius toleransi, dan polygon geofence.
+   - Mengelola data pegawai (NIP, Unit Kerja, Jabatan, Nomor Telepon, Status Keaktifan).
+   - Melihat log presensi pegawai lengkap dengan **Peta Interaktif (Leaflet OSM)** yang memvisualisasikan posisi pegawai saat absen vs area kantor.
 
-## Learning Laravel
+2. **Pegawai (Mobile Smartphone Client)**
+   - Akses via RESTful API yang aman menggunakan **Laravel Sanctum Bearer Token**.
+   - Login menggunakan Email atau NIP + Password.
+   - Mengambil data polygon lokasi kantor aktif untuk tampilan peta di smartphone.
+   - Melakukan **Check-In (Absen Masuk)** dan **Check-Out (Absen Pulang)** dengan validasi koordinat GPS instan.
+   - Perekaman identitas perangkat smartphone (*Device Tracking* & *Anti-Fraud*) dan IP address.
+   - Memantau status presensi hari ini serta riwayat kehadiran bulanan.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 📐 Arsitektur & Mesin Geofencing
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Sistem menggunakan arsitektur **Service Pattern with Separated Concerns**:
+- **`GeofencingService`**: Mengimplementasikan **Algoritma Ray-Casting (Jordan Curve Theorem)** murni di PHP untuk memvalidasi apakah koordinat GPS berada di dalam batas polygon kantor tanpa ketergantungan ekstensi PostGIS/SpatiaLite. Dilengkapi **Formula Haversine** untuk mengukur jarak eksak (dalam satuan meter) jika pegawai berada di luar area kantor.
+- **`AttendanceService`**: Mengelola seluruh *state* transaksi presensi, pencegahan *double check-in*, penentuan status (`Hadir`, `Terlambat`, `Di Luar Area`), dan kalkulasi jarak.
+- **`OfficeLocationService`**: Manajemen lokasi kantor dan pencocokan koordinat GPS terdekat.
+- **`EmployeeService`**: Manajemen siklus data kepegawaian.
+- **`AuthService`**: Autentikasi NIP/Email dan manajemen token Sanctum.
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## 🚀 Panduan Instalasi & Menjalankan Aplikasi
 
+### 1. Prasyarat Sistem
+- PHP >= 8.3 (Disarankan PHP 8.4+)
+- Composer
+- Node.js & NPM
+- SQLite Extension
+
+### 2. Langkah Instalasi
+
+Clone repositori dan masuk ke direktori proyek:
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/farhamapple/demo-presensi-laravel.git
+cd demo-presensi-laravel
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Pasang dependensi PHP:
+```bash
+composer install
+```
 
-## Contributing
+Salin file environment dan generate application key:
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Jalankan migrasi database dan pengisian data demo (*seeding*):
+```bash
+touch database/database.sqlite
+php artisan migrate:fresh --seed
+```
 
-## Code of Conduct
+Jalankan server aplikasi:
+```bash
+php artisan serve
+```
+Aplikasi backend dan API akan aktif di `http://localhost:8000`.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🔐 Kredensial Akun Pengujian (Demo)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 1. Admin SDM (Web Panel)
+- **URL**: [http://localhost:8000/admin](http://localhost:8000/admin)
+- **Email**: `admin@kantor.com`
+- **Password**: `password`
+- **Peran**: Admin HR (Akses penuh ke Dashboard, Log Absensi, Lokasi, dan Data Pegawai)
 
-## License
+### 2. Pegawai Demo (Mobile Client / API)
+- **Email**: `pegawai@kantor.com`
+- **NIP**: `199205122018021002`
+- **Password**: `password`
+- **Peran**: Pegawai (Akses API Mobile)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 📱 Ringkasan Endpoint API Mobile (`/api/v1`)
+
+| Metode | Endpoint | Deskripsi | Autentikasi |
+|---|---|---|---|
+| `POST` | `/api/v1/auth/login` | Login pegawai via NIP/Email + Password | Public |
+| `POST` | `/api/v1/auth/logout` | Revoke/hapus token sesi aktif | Bearer Token |
+| `GET` | `/api/v1/auth/me` | Ambil profil lengkap pegawai yang login | Bearer Token |
+| `GET` | `/api/v1/office-locations` | Daftar lokasi kantor aktif, radius, & polygon | Bearer Token |
+| `POST` | `/api/v1/attendance/check-in` | Absen masuk dengan validasi geofence GPS | Bearer Token |
+| `POST` | `/api/v1/attendance/check-out` | Absen pulang | Bearer Token |
+| `GET` | `/api/v1/attendance/today` | Status dan timeline presensi hari ini | Bearer Token |
+| `GET` | `/api/v1/attendance/history` | Riwayat daftar presensi (pagination & filter) | Bearer Token |
+
+> 📖 **Dokumentasi Lengkap API**: Silakan baca dokumen [docs/api-spec.md](docs/api-spec.md) untuk melihat contoh payload *Request* dan *Response* JSON setiap endpoint.
+
+---
+
+## 🧪 Pengujian Otomatis (Testing)
+
+Proyek ini menggunakan **Pest PHP** dengan cakupan pengujian komprehensif pada lapisan Database, Service Layer (Geofencing Ray Casting & Attendance), Panel Admin Filament, dan RESTful API Mobile:
+
+```bash
+php artisan test
+```
+
+Hasil pengujian:
+```text
+  PASS  Tests\Feature\AttendanceServiceTest
+  ✓ employee records check-in successfully on time within polygon
+  ✓ employee records check-in with late status when past work start time
+  ✓ employee records check-in with outside_area status when outside polygon
+  ✓ employee cannot check-in twice on the same day
+  ✓ employee records check-out successfully after check-in
+  ✓ employee cannot check-out without prior check-in today
+
+  PASS  Tests\Feature\AuthAndEmployeeServiceTest
+  ✓ employee can login via email and receive token
+  ✓ employee can login via NIP and receive token
+  ✓ inactive employee cannot login
+  ✓ admin cannot login via employee mobile auth
+  ✓ employee service creates employee with hashed password and pegawai role
+  ✓ employee service rejects duplicate email or NIP
+
+  PASS  Tests\Feature\DatabaseAndModelTest
+  ✓ admin user can access filament panel
+  ✓ pegawai user cannot access filament panel
+  ✓ office location casts polygon coordinates to array
+  ✓ attendance relationships, status enum casting, and device info work correctly
+  ✓ database seeder populates default data correctly
+
+  PASS  Tests\Feature\FilamentAdminPanelTest
+  ✓ unauthenticated user is redirected to admin login
+  ✓ pegawai user is forbidden from accessing admin panel
+  ✓ admin can access dashboard and see SiAbsen branding
+  ✓ admin can access log absensi table page
+  ✓ admin can access lokasi absensi page and create page
+  ✓ admin can access data pegawai page and create page
+  ✓ attendance map detail view renders with employee and office info
+
+  PASS  Tests\Feature\GeofencingServiceTest
+  ✓ detects point correctly inside polygon
+  ✓ detects point correctly outside polygon
+  ✓ returns false for polygon with less than 3 vertices
+  ✓ validates valid polygon structure
+  ✓ calculates centroid correctly
+  ✓ calculates distance in meters between two coordinates
+
+  PASS  Tests\Feature\MobileApiTest
+  ✓ employee can login via email and receive token
+  ✓ employee can login via NIP
+  ✓ login fails with wrong password
+  ✓ authenticated employee can fetch profile via /me
+  ✓ authenticated employee can logout and revoke token
+  ✓ employee can get active office locations with coordinates and polygon
+  ✓ employee records check-in successfully within geofence
+  ✓ employee records check-in outside geofence marked as outside_area
+  ✓ employee cannot check-in twice on same day via api
+  ✓ employee can check-out after check-in
+  ✓ employee cannot check-out without check-in first
+  ✓ employee can get today attendance status
+  ✓ employee can get paginated attendance history
+
+  Tests:    45 passed (175 assertions)
+  Duration: 1.74s
+```
+
+---
+
+## 📂 Struktur Dokumentasi Proyek
+
+- [docs/api-spec.md](docs/api-spec.md): Spesifikasi lengkap integrasi endpoint API Mobile.
+- [docs/penyelarasan-prd-roadmap.md](docs/penyelarasan-prd-roadmap.md): Penyelarasan PRD SiAbsen dan roadmap terpadu.
+- [docs/PRD.md](docs/PRD.md): Dokumen Product Requirements Document awal.
+- [docs/tahapan-pengembangan.md](docs/tahapan-pengembangan.md): Lembar pelacak checklist pengerjaan fase 1 s/d 6.
+
+---
+
+## 📄 Lisensi
+
+Aplikasi ini dilisensikan di bawah [MIT License](LICENSE).

@@ -366,3 +366,4 @@ Mengambil daftar riwayat presensi pegawai dengan dukungan pagination dan filter 
 | `present` | Hadir | Presensi di dalam area kantor dan sebelum/pada jam 08:00 WIB. |
 | `late` | Terlambat | Presensi di dalam area kantor tetapi melewati jam 08:00 WIB. |
 | `outside_area` | Di Luar Area | Presensi dilakukan di luar area polygon / radius kantor yang diperbolehkan. |
+
