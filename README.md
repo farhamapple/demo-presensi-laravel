@@ -76,10 +76,11 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-Jalankan migrasi database dan pengisian data demo (*seeding*):
+Jalankan migrasi database, pengisian data demo (*seeding*), dan publish aset Filament:
 ```bash
 touch database/database.sqlite
 php artisan migrate:fresh --seed
+php artisan filament:upgrade
 ```
 
 Jalankan server aplikasi:
