@@ -40,8 +40,8 @@ Dokumen ini berisi rencana kerja bertahap (*phased roadmap*) pengembangan aplika
 |---|---|---|
 | **Fase 1** | Inisialisasi Proyek & Fondasi Arsitektur | ✅ Selesai |
 | **Fase 2** | Skema Database, Model Eloquent & Seeder | ✅ Selesai |
-| **Fase 3** | Implementasi Service Layer & Algoritma Geofencing | ⏳ Siap Dikerjakan |
-| **Fase 4** | Panel Admin SDM (Filament v5) | ⏳ Menunggu |
+| **Fase 3** | Implementasi Service Layer & Algoritma Geofencing | ✅ Selesai |
+| **Fase 4** | Panel Admin SDM (Filament v5) | ⏳ Siap Dikerjakan |
 | **Fase 5** | API Mobile Pegawai (Laravel Sanctum) | ⏳ Menunggu |
 | **Fase 6** | Pengujian (Pest Test), Dokumentasi API & Finalisasi | ⏳ Menunggu |
 
@@ -89,22 +89,29 @@ Tujuan: Mendesain struktur tabel database SQLite yang optimal, relasi model, ser
 ### 🧠 Fase 3: Service Layer & Engine Geofencing Polygon
 Tujuan: Memisahkan logika bisnis dari controller & panel, serta membangun algoritma Point-in-Polygon (Ray Casting) murni di PHP agar kompatibel dengan SQLite tanpa extension GIS eksternal.
 
-- [ ] `GeofencingService`:
+- [x] `GeofencingService`:
   - Implementasi metode `isPointInPolygon(float $lat, float $lng, array $polygon): bool` menggunakan algoritma *Ray Casting* (Jordan Curve Theorem).
   - Validasi struktur polygon (minimal 3 titik koordinat dan tertutup).
   - Perhitungan titik tengah (*centroid*) polygon sebagai fallback/referensi peta.
-- [ ] `AttendanceService`:
+  - Perhitungan jarak (Haversine formula) dari titik koordinat ke centroid kantor.
+- [x] `AttendanceService`:
   - Logika verifikasi waktu kerja (penentuan status tepat waktu vs terlambat).
   - Validasi absen masuk (mencegah double check-in di hari yang sama).
-  - Validasi absen pulang (memeriksa keberadaan catatan absen masuk hari tersebut).
+  - Validasi absen pulang (memeriksa catatan absen masuk hari tersebut, mencatat waktu pulang & device).
   - Integrasi validasi lokasi bersama `GeofencingService`.
-- [ ] `OfficeLocationService`:
+  - Perekaman device info (`device_name`, `device_id`, `check_out_device_name`).
+- [x] `OfficeLocationService`:
   - Logika bisnis CRUD lokasi kantor & pemformatan GeoJSON/polygon koordinat.
-- [ ] `EmployeeService`:
-  - Logika registrasi, update data profil, reset password, dan status aktif pegawai.
-- [ ] `AuthService`:
-  - Logika verifikasi kredensial login pegawai dan pembuatan/pencabutan Sanctum token.
-- [ ] Unit Test untuk `GeofencingService` (pengujian koordinat di dalam polygon, di luar polygon, dan di batas garis polygon).
+  - Pencarian lokasi kantor terdekat/cocok berdasarkan titik GPS.
+- [x] `EmployeeService`:
+  - Logika registrasi pegawai, update data profil, reset password, toggle status aktif, dan validasi keunikan NIP/Email.
+- [x] `AuthService`:
+  - Logika verifikasi kredensial login pegawai (mendukung NIP atau Email) dan penerbitan token Sanctum mobile.
+- [x] Unit & Feature Test Service Layer:
+  - `tests/Feature/GeofencingServiceTest.php` (6 tests).
+  - `tests/Feature/AttendanceServiceTest.php` (6 tests).
+  - `tests/Feature/AuthAndEmployeeServiceTest.php` (6 tests).
+  - Total 25 tests dalam test suite (**100% Passed**).
 
 ---
 
