@@ -8,6 +8,13 @@
   <img src="https://img.shields.io/badge/Tests-45%20Passed-brightgreen?style=for-the-badge&logo=pest&logoColor=white" alt="Pest Tests" />
 </p>
 
+> [!NOTE]
+> ⚠️ **DISCLAIMER: HANYA UNTUK KEPERLUAN DEMO & PEMBELAJARAN**
+> 
+> Proyek **SiAbsen** ini dikembangkan secara khusus untuk **keperluan demonstrasi teknis dan pembelajaran** (*educational & learning purposes only*). Repositori ini mendemonstrasikan implementasi praktik terbaik (*best practices*) arsitektur modern pada ekosistem Laravel 13, Filament v5, Service Pattern terisolasi, algoritma Geofencing Poligon murni (*Jordan Curve Theorem Ray-Casting*), dan Mobile RESTful API dengan Laravel Sanctum.
+> 
+> Seluruh data seperti akun pengguna, nomor induk pegawai (NIP), nomor telepon, titik koordinat kantor, serta log presensi di dalamnya merupakan **data percontohan (*dummy*)**. Jangan mempergunakan kredensial atau konfigurasi bawaan proyek ini pada lingkungan *production* publik tanpa pengamanan tambahan yang memadai.
+
 **SiAbsen** adalah platform administrasi dan *Application Programming Interface* (API) presensi pegawai berbasis mobile smartphone. Aplikasi ini dirancang untuk **Admin HR / SDM** guna memantau aktivitas kehadiran pegawai secara *real-time*, memetakan titik lokasi absensi kantor (*dual geofencing: polygon & radius*), serta menyediakan *endpoint* RESTful API bagi aplikasi mobile pegawai.
 
 ---
