@@ -43,7 +43,7 @@ Dokumen ini berisi rencana kerja bertahap (*phased roadmap*) pengembangan aplika
 | **Fase 3** | Implementasi Service Layer & Algoritma Geofencing | ✅ Selesai |
 | **Fase 4** | Panel Admin SDM (Filament v5 - SiAbsen PRD) | ✅ Selesai |
 | **Fase 5** | API Mobile Pegawai (Laravel Sanctum) | ✅ Selesai |
-| **Fase 6** | Pengujian (Pest Test), Dokumentasi API & Finalisasi | ⏳ Siap Dikerjakan |
+| **Fase 6** | Pengujian (Pest Test), Dokumentasi API & Finalisasi | ✅ Selesai |
 
 ---
 
@@ -164,15 +164,16 @@ Tujuan: Menyediakan endpoint API yang aman, standar, dan mudah dikonsumsi oleh a
 ### 🧪 Fase 6: Pengujian, Dokumentasi API & Finalisasi
 Tujuan: Memastikan kestabilan sistem, integritas data, kerapian kode, dan kesiapan integrasi mobile.
 
-- [ ] Automated Testing (Pest PHP):
-  - Feature test autentikasi API mobile (login berhasil, login gagal, unauthorized).
-  - Feature test alur absensi check-in/check-out (di dalam polygon vs di luar polygon).
-  - Feature test akses panel admin (proteksi role pegawai vs admin).
-- [ ] Penyusunan Panduan Integrasi API Mobile (`docs/api-spec.md`):
+- [x] Automated Testing (Pest PHP):
+  - [x] Feature test autentikasi API mobile (login berhasil, login gagal, unauthorized).
+  - [x] Feature test alur absensi check-in/check-out (di dalam polygon vs di luar polygon).
+  - [x] Feature test akses panel admin (proteksi role pegawai vs admin, dashboard 5 KPI cards).
+  - [x] Seluruh test suite: 45 tests, 175 assertions passed 100%.
+- [x] Penyusunan Panduan Integrasi API Mobile (`docs/api-spec.md`):
   - Daftar endpoint, header autentikasi, contoh payload request JSON, dan format response sukses & error.
-- [ ] Code formatting & linting dengan Laravel Pint:
+- [x] Code formatting & linting dengan Laravel Pint:
   - Eksekusi `vendor/bin/pint --format agent` untuk menjaga keseragaman style kode.
-- [ ] Verifikasi manual alur keseluruhan sistem.
+- [x] Verifikasi manual alur keseluruhan sistem.
 
 ---
 

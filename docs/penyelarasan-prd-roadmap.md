@@ -47,7 +47,7 @@ Untuk mendukung 100% kebutuhan PRD SiAbsen, dilakukan penambahan kolom ringan:
 | **Fase 3** | Service Layer & Engine Geofencing (Dual Polygon & Radius) | ✅ Selesai | Ray Casting & Haversine formula teruji |
 | **Fase 4** | Panel Admin Web SiAbsen (Filament v5 - PRD Aligned) | ✅ Selesai | Dashboard 5 KPI, Log Absensi + Interactive Map Modal, Lokasi, Pegawai |
 | **Fase 5** | API Mobile Pegawai (Sanctum REST API) | ✅ Selesai | Endpoint Auth, Sync Lokasi, Check-in/out, History, 13 Tests Passed |
-| **Fase 6** | Pengujian Terpadu, Dokumentasi API & Finalisasi | ⏳ Siap Dikerjakan | Pest test menyeluruh & panduan mobile |
+| **Fase 6** | Pengujian Terpadu, Dokumentasi API & Finalisasi | ✅ Selesai | 45 Pest tests lulus (100%), docs/api-spec.md lengkap |
 
 ---
 
@@ -146,8 +146,8 @@ Tujuan: Menyediakan API lengkap untuk aplikasi mobile smartphone pegawai.
 ### 🧪 Fase 6: Pengujian Terpadu, Dokumentasi API & Finalisasi
 Tujuan: Uji coba menyeluruh, penulisan spesifikasi API, dan perapian kode.
 
-- [ ] Automated Testing (Pest PHP) untuk seluruh alur Filament dan endpoint API.
-- [ ] Dokumentasi Lengkap Endpoint API Mobile (`docs/api-spec.md`).
-- [ ] Linting & code formatting dengan Laravel Pint (`vendor/bin/pint --format agent`).
-- [ ] Panduan integrasi mobile dan deployment.
+- [x] Automated Testing (Pest PHP) untuk seluruh alur Filament dan endpoint API (45 test cases, 175 assertions, passed 100%).
+- [x] Dokumentasi Lengkap Endpoint API Mobile (`docs/api-spec.md`).
+- [x] Linting & code formatting dengan Laravel Pint (`vendor/bin/pint --format agent`).
+- [x] Panduan integrasi mobile dan kredensial demo.
 
