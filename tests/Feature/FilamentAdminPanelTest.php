@@ -1,5 +1,6 @@
 <?php
 
+use App\Filament\Resources\OfficeLocations\Schemas\OfficeLocationForm;
 use App\Models\Attendance;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
@@ -57,9 +58,28 @@ test('admin can access lokasi absensi page and create page with map picker', fun
     $createResponse = $this->actingAs($this->admin)->get('/admin/office-locations/create');
     $createResponse->assertOk()
         ->assertSee('Nama Lokasi Kantor')
-        ->assertSee('Peta Interaktif Penentuan Titik Lokasi')
+        ->assertSee('Peta Boundary Polygon Kantor')
         ->assertSee('filament-map-picker')
-        ->assertSee('Radius Absensi');
+        ->assertDontSee('Radius Absensi')
+        ->assertDontSee('Latitude Titik Pusat')
+        ->assertDontSee('Longitude Titik Pusat');
+});
+
+test('office location form correctly converts polygon coordinates to geojson and extracts back', function () {
+    $polygon = [
+        ['lat' => -6.1748000, 'lng' => 106.8260000],
+        ['lat' => -6.1748000, 'lng' => 106.8285000],
+        ['lat' => -6.1765000, 'lng' => 106.8285000],
+        ['lat' => -6.1765000, 'lng' => 106.8260000],
+    ];
+
+    $geojson = OfficeLocationForm::polygonToGeoJson($polygon);
+    expect($geojson)->toBeArray()
+        ->and($geojson['type'])->toBe('FeatureCollection')
+        ->and($geojson['features'][0]['geometry']['type'])->toBe('Polygon');
+
+    $extracted = OfficeLocationForm::extractPolygonFromGeoJson($geojson);
+    expect($extracted)->toBe($polygon);
 });
 
 test('admin can access data pegawai page and create page', function () {
