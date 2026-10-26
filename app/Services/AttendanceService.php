@@ -33,7 +33,8 @@ class AttendanceService
         float $longitude,
         ?string $deviceName = null,
         ?string $deviceId = null,
-        ?string $notes = null
+        ?string $notes = null,
+        ?string $ipAddress = null
     ): Attendance {
         $today = Carbon::today()->toDateString();
 
@@ -57,21 +58,24 @@ class AttendanceService
             ]);
         }
 
-        // 3. Validate GPS coordinates against office polygon geofence
-        $isInsidePolygon = $this->geofencingService->isPointInPolygon(
-            $latitude,
-            $longitude,
-            $officeLocation->polygon_coordinates ?? []
-        );
+        // 3. Calculate distance to office
+        $distanceMeters = ($officeLocation->latitude !== null && $officeLocation->longitude !== null)
+            ? $this->geofencingService->calculateDistanceInMeters($latitude, $longitude, $officeLocation->latitude, $officeLocation->longitude)
+            : $this->calculateDistanceToCentroid($latitude, $longitude, $officeLocation->polygon_coordinates ?? []);
 
-        // 4. Determine attendance status
+        // 4. Validate GPS coordinates against office polygon / radius geofence
+        $hasPolygon = ! empty($officeLocation->polygon_coordinates) && count($officeLocation->polygon_coordinates) >= 3;
+        $isInsidePolygon = $hasPolygon
+            ? $this->geofencingService->isPointInPolygon($latitude, $longitude, $officeLocation->polygon_coordinates)
+            : ($distanceMeters <= ($officeLocation->radius_meters ?? 100));
+
+        // 5. Determine attendance status
         $now = Carbon::now();
         $startTime = Carbon::today()->setTimeFromTimeString($this->workStartTime);
 
         if (! $isInsidePolygon) {
             $status = AttendanceStatus::OutsideArea;
-            $distanceToCentroid = $this->calculateDistanceToCentroid($latitude, $longitude, $officeLocation->polygon_coordinates ?? []);
-            $autoNote = sprintf('Absen di luar area kantor (jarak ~%s meter dari titik tengah kantor).', number_format($distanceToCentroid, 0));
+            $autoNote = sprintf('Absen di luar area kantor (jarak ~%s meter dari titik lokasi kantor).', number_format($distanceMeters, 0));
             $notes = $notes ? $notes.' | '.$autoNote : $autoNote;
         } elseif ($now->gt($startTime)) {
             $status = AttendanceStatus::Late;
@@ -79,7 +83,7 @@ class AttendanceService
             $status = AttendanceStatus::Present;
         }
 
-        // 5. Create attendance record
+        // 6. Create attendance record
         return Attendance::create([
             'user_id' => $user->id,
             'office_location_id' => $officeLocation->id,
@@ -87,10 +91,12 @@ class AttendanceService
             'check_in_at' => $now,
             'check_in_latitude' => $latitude,
             'check_in_longitude' => $longitude,
+            'distance_meters' => $distanceMeters,
             'status' => $status,
             'notes' => $notes,
             'device_name' => $deviceName,
             'device_id' => $deviceId,
+            'ip_address' => $ipAddress,
         ]);
     }
 

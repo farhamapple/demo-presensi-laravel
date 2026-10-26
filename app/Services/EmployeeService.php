@@ -76,7 +76,10 @@ class EmployeeService
             'name' => $data['name'],
             'email' => $data['email'],
             'nip' => $data['nip'] ?? null,
+            'unit_kerja' => $data['unit_kerja'] ?? null,
+            'jabatan' => $data['jabatan'] ?? null,
             'phone' => $data['phone'] ?? null,
+            'avatar_url' => $data['avatar_url'] ?? null,
             'role' => UserRole::Pegawai,
             'is_active' => $data['is_active'] ?? true,
             'password' => $password,
@@ -87,7 +90,7 @@ class EmployeeService
     /**
      * Update an employee.
      *
-     * @param  array{name?: string, email?: string, nip?: ?string, phone?: ?string, password?: ?string, is_active?: bool}  $data
+     * @param  array{name?: string, email?: string, nip?: ?string, unit_kerja?: ?string, jabatan?: ?string, phone?: ?string, avatar_url?: ?string, password?: ?string, is_active?: bool}  $data
      *
      * @throws ValidationException
      */
@@ -111,7 +114,7 @@ class EmployeeService
 
         $updateData = [];
 
-        foreach (['name', 'email', 'nip', 'phone', 'is_active'] as $field) {
+        foreach (['name', 'email', 'nip', 'unit_kerja', 'jabatan', 'phone', 'avatar_url', 'is_active'] as $field) {
             if (array_key_exists($field, $data)) {
                 $updateData[$field] = $data[$field];
             }

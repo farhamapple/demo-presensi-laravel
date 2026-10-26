@@ -19,10 +19,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'check_in_longitude',
     'check_out_latitude',
     'check_out_longitude',
+    'distance_meters',
     'status',
     'notes',
     'device_name',
     'device_id',
+    'ip_address',
     'check_out_device_name',
 ])]
 class Attendance extends Model
@@ -61,6 +63,7 @@ class Attendance extends Model
             'check_in_longitude' => 'float',
             'check_out_latitude' => 'float',
             'check_out_longitude' => 'float',
+            'distance_meters' => 'float',
             'status' => AttendanceStatus::class,
         ];
     }
