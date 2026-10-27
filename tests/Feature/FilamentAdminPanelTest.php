@@ -2,6 +2,7 @@
 
 use App\Filament\Resources\OfficeLocations\Schemas\OfficeLocationForm;
 use App\Models\Attendance;
+use App\Models\OfficeLocation;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -59,10 +60,25 @@ test('admin can access lokasi absensi page and create page with map picker', fun
     $createResponse->assertOk()
         ->assertSee('Nama Lokasi Kantor')
         ->assertSee('Peta Boundary Polygon Kantor')
+        ->assertSee('Koordinat Polygon')
+        ->assertSee('Jumlah Titik')
         ->assertSee('filament-map-picker')
+        ->assertSee('#002d62')
+        ->assertSee('#0284c7')
+        ->assertSee('setPathOptions')
         ->assertDontSee('Radius Absensi')
         ->assertDontSee('Latitude Titik Pusat')
         ->assertDontSee('Longitude Titik Pusat');
+
+    $office = OfficeLocation::first();
+    $editResponse = $this->actingAs($this->admin)->get("/admin/office-locations/{$office->id}/edit");
+    $editResponse->assertOk()
+        ->assertSee('Peta Boundary Polygon Kantor')
+        ->assertSee('Koordinat Polygon')
+        ->assertSee('Jumlah Titik')
+        ->assertSee('#002d62')
+        ->assertSee('#0284c7')
+        ->assertSee('setPathOptions');
 });
 
 test('office location form correctly converts polygon coordinates to geojson and extracts back', function () {
@@ -95,7 +111,7 @@ test('admin can access data pegawai page and create page', function () {
         ->assertSee('Unit Kerja');
 });
 
-test('attendance map detail view renders with employee and office info', function () {
+test('attendance map detail view renders with employee, check-in point, and office info', function () {
     $attendance = Attendance::first();
 
     $rendered = view('filament.attendances.map-detail', ['record' => $attendance])->render();
@@ -103,5 +119,15 @@ test('attendance map detail view renders with employee and office info', functio
     expect($rendered)->toContain($attendance->user->name)
         ->and($rendered)->toContain($attendance->officeLocation->name)
         ->and($rendered)->toContain('attendance-map-'.$attendance->id)
-        ->and($rendered)->toContain('Visualisasi Posisi Pegawai vs Area Kantor');
+        ->and($rendered)->toContain('Visualisasi Posisi Pegawai vs Area Kantor')
+        ->and($rendered)->toContain('Titik Absen')
+        ->and($rendered)->toContain('attendanceDetailMap');
+
+    // Admin can access attendances list and see the detail action and preloaded leaflet assets
+    $response = $this->actingAs($this->admin)->get('/admin/attendances');
+    $response->assertOk()
+        ->assertSee('Log Absensi')
+        ->assertSee('Detail & Map')
+        ->assertSee('leaflet.css')
+        ->assertSee('leaflet.js');
 });

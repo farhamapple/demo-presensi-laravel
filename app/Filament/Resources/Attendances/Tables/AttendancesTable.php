@@ -126,7 +126,7 @@ class AttendancesTable
                     ->icon(Heroicon::OutlinedMap)
                     ->color('info')
                     ->modalHeading(fn (Attendance $record): string => "Detail Transaksi Absensi: {$record->user->name}")
-                    ->modalWidth(Width::FourExtraLarge)
+                    ->modalWidth(Width::FiveExtraLarge)
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel('Tutup')
                     ->modalContent(fn (Attendance $record) => view('filament.attendances.map-detail', ['record' => $record])),

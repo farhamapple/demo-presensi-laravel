@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\Attendances\Pages\ListAttendances;
 use App\Filament\Widgets\AttendanceStatsOverview;
 use App\Filament\Widgets\LatestAttendanceWidget;
 use Filament\Http\Middleware\Authenticate;
@@ -12,6 +13,8 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Contracts\View\View;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -42,6 +45,13 @@ class AdminPanelProvider extends PanelProvider
                 AttendanceStatsOverview::class,
                 LatestAttendanceWidget::class,
             ])
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn (): View => view('filament.hooks.leaflet-assets'),
+                scopes: [
+                    ListAttendances::class,
+                ],
+            )
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
