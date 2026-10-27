@@ -123,11 +123,16 @@ test('attendance map detail view renders with employee, check-in point, and offi
         ->and($rendered)->toContain('Titik Absen')
         ->and($rendered)->toContain('attendanceDetailMap');
 
-    // Admin can access attendances list and see the detail action and preloaded leaflet assets
+    // Admin can access attendances list and see the detail action, filters above content, and preloaded leaflet assets
     $response = $this->actingAs($this->admin)->get('/admin/attendances');
     $response->assertOk()
         ->assertSee('Log Absensi')
         ->assertSee('Detail & Map')
+        ->assertSee('Status Kehadiran')
+        ->assertSee('Lokasi Kantor')
+        ->assertSee('Unit Kerja')
+        ->assertSee('Dari Tanggal')
+        ->assertSee('Sampai Tanggal')
         ->assertSee('leaflet.css')
         ->assertSee('leaflet.js');
 });

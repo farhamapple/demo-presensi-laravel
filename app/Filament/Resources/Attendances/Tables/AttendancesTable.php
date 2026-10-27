@@ -13,6 +13,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -119,7 +120,7 @@ class AttendancesTable
                                 fn (Builder $q, $date): Builder => $q->whereDate('date', '<=', $date),
                             );
                     }),
-            ])
+            ], layout: FiltersLayout::AboveContent)
             ->recordActions([
                 Action::make('detail')
                     ->label('Detail & Map')
