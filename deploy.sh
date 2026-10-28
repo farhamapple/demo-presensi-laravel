@@ -37,6 +37,13 @@ docker compose up -d --build
 
 echo "=== [4/6] Menginstall PHP & JS dependencies di dalam container ==="
 docker compose exec -T app composer install --no-dev --optimize-autoloader --no-interaction
+
+# Pastikan APP_KEY sudah digenerate jika masih kosong di .env
+if ! grep -q "^APP_KEY=base64:" .env; then
+    echo "APP_KEY belum disetel. Menjalankan key:generate..."
+    docker compose exec -T app php artisan key:generate --force
+fi
+
 docker compose exec -T app npm ci || docker compose exec -T app npm install
 docker compose exec -T app npm run build
 
