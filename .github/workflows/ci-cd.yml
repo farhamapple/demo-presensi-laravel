@@ -1,0 +1,85 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run Tests & Code Style
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, bcmath, curl
+          coverage: none
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Install Composer Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Install NPM Dependencies & Build Assets
+        run: |
+          npm ci
+          npm run build
+
+      - name: Generate App Key
+        run: php artisan key:generate
+
+      - name: Prepare Database
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+          php artisan migrate --force
+
+      - name: Run Tests (Pest)
+        run: vendor/bin/pest
+
+      - name: Run Pint (Code Style)
+        run: vendor/bin/pint --test
+
+  deploy:
+    name: Deploy to Production VPS
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Execute Deployment on Remote VPS via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST || 'demo-presensi.farham.my.id' }}
+          username: ${{ secrets.VPS_USERNAME || 'ubuntu' }}
+          key: ${{ secrets.SSH_KEY || secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            set -e
+            DEPLOY_PATH="${{ secrets.VPS_DEPLOY_PATH || '/home/ubuntu/apps/demo-presensi-laravel' }}"
+            echo "Navigating to deploy path: $DEPLOY_PATH"
+            cd "$DEPLOY_PATH"
+
+            echo "Pulling latest code from main branch..."
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "Executing deploy.sh..."
+            chmod +x deploy.sh
+            ./deploy.sh

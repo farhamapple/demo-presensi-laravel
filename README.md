@@ -195,6 +195,48 @@ Hasil pengujian:
 
 ---
 
+## 🐳 Deployment & CI/CD
+
+### 1. Menjalankan dengan Docker (FrankenPHP)
+Aplikasi telah dikonfigurasi dengan FrankenPHP + Supervisor (FrankenPHP + Queue Worker + Vite) serta integrasi network `proxy` untuk reverse proxy.
+
+```bash
+# Jalankan container
+docker compose up -d --build
+```
+Aplikasi lokal akan berjalan pada `http://localhost:8001` (Vite dev server pada port `5175`).
+
+### 2. Deployment Otomatis di VPS dengan GitHub Actions
+Repositori ini dilengkapi pipeline CI/CD otomatis di `.github/workflows/ci-cd.yml`:
+1. **Testing & Code Style**: Menjalankan Pest test suite dan Laravel Pint setiap push/PR.
+2. **Auto Deploy**: Ketika push ke branch `main`, workflow akan login ke VPS via SSH dan menjalankan skrip `deploy.sh`.
+
+#### Konfigurasi GitHub Repository Secret:
+Buka repositori GitHub Anda di **Settings > Secrets and variables > Actions > New repository secret**.
+
+Anda **hanya membutuhkan 1 secret**:
+
+| Secret Name | Keterangan |
+| :--- | :--- |
+| `SSH_KEY` | Isi seluruh private key SSH Anda (`~/.ssh/id_rsa` atau `~/.ssh/id_ed25519`) yang diizinkan login ke user `ubuntu` di VPS. |
+
+> [!NOTE]
+> Parameter lainnya sudah memiliki nilai *default*:
+> - **Host**: `demo-presensi.farham.my.id` (bisa di-override dengan secret `VPS_HOST`)
+> - **Username**: `ubuntu` (bisa di-override dengan secret `VPS_USERNAME`)
+> - **Port**: `22` (bisa di-override dengan secret `VPS_PORT`)
+> - **Deploy Path**: `/home/ubuntu/apps/demo-presensi-laravel` (bisa di-override dengan secret `VPS_DEPLOY_PATH`)
+
+### 3. Deploy Manual via Script di VPS
+Jika ingin deploy manual tanpa GitHub Actions:
+```bash
+cd /home/ubuntu/apps/demo-presensi-laravel
+chmod +x deploy.sh
+./deploy.sh
+```
+
+---
+
 ## 📂 Struktur Dokumentasi Proyek
 
 - [docs/api-spec.md](docs/api-spec.md): Spesifikasi lengkap integrasi endpoint API Mobile.

@@ -1,0 +1,32 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: siabsen_app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8001}:8001"
+      - "${VITE_PORT:-5175}:${VITE_PORT:-5175}"
+    environment:
+      SERVER_NAME: ":8001"
+      CADDY_GLOBAL_OPTIONS: "auto_https off"
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: "http://localhost:${APP_PORT:-8001}"
+      DB_CONNECTION: sqlite
+      DB_DATABASE: /app/database/database.sqlite
+      SESSION_DRIVER: database
+      QUEUE_CONNECTION: database
+      AUTO_MIGRATE: "true"
+      AUTO_SEED: "false"
+    volumes:
+      - .:/app
+    networks:
+      - proxy
+      - default
+
+networks:
+  proxy:
+    external: true
+
