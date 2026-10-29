@@ -214,15 +214,15 @@ Repositori ini dilengkapi pipeline CI/CD otomatis di `.github/workflows/ci-cd.ym
 #### Konfigurasi GitHub Repository Secret:
 Buka repositori GitHub Anda di **Settings > Secrets and variables > Actions > New repository secret**.
 
-Anda **hanya membutuhkan 1 secret**:
+Tambahkan 2 secret berikut:
 
-| Secret Name | Keterangan |
-| :--- | :--- |
-| `SSH_KEY` | Isi seluruh private key SSH Anda (`~/.ssh/id_rsa` atau `~/.ssh/id_ed25519`) yang diizinkan login ke user `ubuntu` di VPS. |
+| Secret Name | Keterangan | Contoh Nilai |
+| :--- | :--- | :--- |
+| `VPS_HOST` | **IP Asli VPS** (Jangan gunakan domain jika domain menggunakan Cloudflare Proxy). | `103.xxx.xxx.xxx` |
+| `SSH_KEY` | Isi seluruh private key SSH Anda (`~/.ssh/id_rsa` atau `~/.ssh/id_ed25519`) yang diizinkan login ke user `ubuntu` di VPS. | `-----BEGIN OPENSSH PRIVATE KEY-----...` |
 
 > [!NOTE]
 > Parameter lainnya sudah memiliki nilai *default*:
-> - **Host**: `demo-presensi.farham.my.id` (bisa di-override dengan secret `VPS_HOST`)
 > - **Username**: `ubuntu` (bisa di-override dengan secret `VPS_USERNAME`)
 > - **Port**: `22` (bisa di-override dengan secret `VPS_PORT`)
 > - **Deploy Path**: `/home/ubuntu/apps/demo-presensi-laravel` (bisa di-override dengan secret `VPS_DEPLOY_PATH`)
