@@ -74,7 +74,7 @@ jobs:
           port: ${{ secrets.VPS_PORT || 22 }}
           script: |
             set -e
-            DEPLOY_PATH="${{ secrets.VPS_DEPLOY_PATH || '/var/www/demo-presensi-laravel' }}"
+            DEPLOY_PATH="${{ secrets.VPS_DEPLOY_PATH || '/home/ubuntu/apps/demo-presensi-laravel' }}"
             echo "Navigating to deploy path: $DEPLOY_PATH"
             cd "$DEPLOY_PATH"
 
