@@ -269,3 +269,12 @@ test('employee can get paginated attendance history', function () {
             'meta',
         ]);
 });
+
+test('unauthenticated request to protected api returns 401 json without login route error', function () {
+    $response = $this->get('/api/v1/auth/me');
+
+    $response->assertStatus(401)
+        ->assertJson([
+            'message' => 'Unauthenticated.',
+        ]);
+});
